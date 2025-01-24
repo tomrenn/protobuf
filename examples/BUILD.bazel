@@ -9,9 +9,26 @@ load("@com_google_protobuf//bazel:java_lite_proto_library.bzl", "java_lite_proto
 load("@com_google_protobuf//bazel:java_proto_library.bzl", "java_proto_library")
 load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@com_google_protobuf//bazel:py_proto_library.bzl", "py_proto_library")
+load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_pkg//pkg:mappings.bzl", "pkg_files", "strip_prefix")
 load("@rules_python//python:py_binary.bzl", "py_binary")
+load("@rules_android//rules:rules.bzl", "android_binary", "android_library")
+
+android_binary(
+    name = "android-app",
+    manifest = "AndroidManifest.xml",
+    deps = [
+        ":android-lib",
+    ],
+)
+
+android_library(
+    name = "android-lib",
+    srcs = ["Android.java"],
+    deps = [":addressbook_cc_proto", ":add_person_cpp"],
+    manifest = "AndroidManifest.xml",
+)
 
 # cc_proto_library is intentionally not loaded, to test Bazel's built-in implementation
 # against Protobuf's implementation (already used building protoc)
@@ -45,8 +62,7 @@ cc_binary(
     srcs = ["add_person.cc"],
     deps = [
         ":addressbook_cc_proto",
-        "@com_google_protobuf//:protobuf",
-        "@com_google_protobuf//src/google/protobuf/util:time_util",
+        "@grpc//:grpc_common",
     ],
 )
 

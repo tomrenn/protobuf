@@ -1,13 +1,28 @@
 """Bazel module dependencies"""
 
-bazel_dep(name = "protobuf", version = "0.0.0", repo_name = "com_google_protobuf")
-local_path_override(
-    module_name = "protobuf",
-    path = "..",
-)
+bazel_dep(name = "protobuf", version = "29.0", repo_name = "com_google_protobuf")
+#local_path_override(
+#    module_name = "protobuf",
+#    path = "..",
+#)
 
 bazel_dep(name = "bazel_skylib", version = "1.0.3")
 bazel_dep(name = "rules_cc", version = "0.0.16")
 bazel_dep(name = "rules_java", version = "8.3.2")
 bazel_dep(name = "rules_pkg", version = "0.7.0")
+bazel_dep(name = "grpc", version = "1.68.0")
 bazel_dep(name = "rules_python", version = "0.25.0")
+
+bazel_dep(name = "rules_android", version = "0.6.0")
+android_sdk_repository_extension = use_extension("@rules_android//rules/android_sdk_repository:rule.bzl", "android_sdk_repository_extension")
+use_repo(android_sdk_repository_extension, "androidsdk")
+
+register_toolchains("@androidsdk//:sdk-toolchain", "@androidsdk//:all")
+
+
+bazel_dep(name = "rules_android_ndk", version = "0.1.2")
+android_ndk_repository_extension = use_extension("@rules_android_ndk//:extension.bzl", "android_ndk_repository_extension")
+use_repo(android_ndk_repository_extension, "androidndk")
+
+register_toolchains("@androidndk//:all")
+

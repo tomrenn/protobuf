@@ -7,3 +7,6 @@ common:windows --cxxopt=/std:c++17 --host_cxxopt=/std:c++17 --enable_runfiles
 
 build --experimental_remote_cache_eviction_retries=5
 build --remote_download_outputs=all
+--experimental_enable_android_migration_apis
+--experimental_google_legacy_api
+common --android_platforms=@rules_android//:x86,@rules_android//:x86_64,@rules_android//:armeabi-v7a,@rules_android//:arm64-v8a
